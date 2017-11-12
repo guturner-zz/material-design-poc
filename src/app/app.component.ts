@@ -1,11 +1,30 @@
 import { Component } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html'
 })
 export class AppComponent {
-  name = new FormControl();
+  userInfoForm: FormGroup; // To be instantiated via the FormBuilder factory.
 
+  constructor(private fb: FormBuilder) { // Injects a FormBuilder
+    this.createForm();
+  }
+
+  createForm() {
+    // Replaces:
+    /*
+      this.userInfoForm = new FormGroup({
+        name: new FormControl()
+      });
+    */
+    this.userInfoForm = this.fb.group({
+      // Multiple validators can be passed via a list:
+      name: ['', [
+          Validators.required, 
+          Validators.pattern(/^[^1-9]{3,}$/)
+        ]]
+    });
+  }
 }
